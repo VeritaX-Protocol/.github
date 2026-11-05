@@ -1,114 +1,115 @@
 # VeritaX Protocol
 
-Sistema para **emitir y verificar certificados, diplomas, carnets y constancias de eventos** con respaldo técnico en una blockchain, sin exponer datos personales.
+Un motor mínimo y abierto para que **clubes educativos informales** emitan **certificados de asistencia o de cursos de capacitación** que cualquier persona pueda verificar con una URL pública, normalmente un QR impreso en el certificado.
 
-> **Estado:** fase de aprendizaje y pruebas (spikes). Solo testnet y llaves de prueba. Nada de lo descrito aquí como "planificado" está implementado todavía.
+> **Estado:** investigación y laboratorios. El motor de producto **todavía no está construido**. Lo descrito como "planeado" no existe aún, no hay pilotos en producción y no se ha desplegado nada en Mainnet.
 
 ---
 
-## 1. Qué es
+## 1. Problema y público
 
-VeritaX permite que una **entidad** (universidad, instituto, academia, organizador de eventos) emita documentos verificables a sus estudiantes o asistentes, y que cualquier persona pueda comprobar después, en segundos, que ese documento existe, quién lo emitió y que no fue alterado.
+Los clubes y comunidades de aprendizaje informal (por ejemplo WayLearn, My First Bitcoin, Satoshi Team, BAF, Cartagena Onchain o Platohedro) entregan constancias de asistencia y de cursos cortos, pero cada una es un PDF o una imagen que nadie puede comprobar fácilmente.
 
-Tipos de documento:
+VeritaX busca que ese certificado sea verificable en segundos, sin crear una cuenta y sin llamar al club.
 
-- Títulos y diplomas
-- Certificaciones y constancias de cursos
-- Carnets (estudiantiles, de membresía, etc.)
-- Constancias de asistencia a eventos
+Los primeros pilotos previstos son **Cartagena Onchain** y **Platohedro**, organizaciones cercanas al proyecto. Son planes: aún no hay ninguno en marcha.
 
-Cada cliente es una entidad independiente: emite sus propios documentos, asocia una **plantilla** a cada curso, certificación o evento, y puede **revocar** cualquier documento que haya emitido.
+**Alcance.** VeritaX no emite títulos académicos ni certificados con responsabilidad legal mayor. Por ahora solo certificados de asistencia y de curso de capacitación.
 
-## 2. Cómo funciona
+## 2. Qué se construye y por qué
+
+VeritaX construye su **propio motor mínimo**, que corre sobre **Stellar (Soroban)**, y ese motor es el que se usa para emitir las certificaciones de los clubes. No es solo una capa de attestations: incluye esquemas, emisores autorizados, registro, revocación y verificación pública.
+
+Existen servicios de attestations sobre Stellar y otras cadenas. VeritaX construye un motor mínimo enfocado en clubes educativos informales y lo mantiene abierto para interoperar con otros servicios más adelante. Algunas de esas ideas, como las de ACTA, se consideran para etapas futuras y otros usos.
+
+## 3. Cómo funciona (visión general)
+
+1. **Esquema:** un archivo JSON que describe los campos de un certificado. Los esquemas tienen versiones: una versión nueva enlaza a la anterior y lo ya emitido sigue siendo válido.
+2. **Emisor autorizado:** cada esquema define qué clubes pueden emitir con él. Un club puede estar activo o retirado; si se retira, **sus certificados emitidos se conservan** (retirarse no es revocar).
+3. **Registro:** al emitir, el contrato guarda un registro básico con topes por campo, por número de campos y por tamaño (sin textos libres). Los valores concretos se miden en testnet.
+4. **Revocación y estado:** el club puede revocar un certificado, y su estado se puede consultar.
+5. **Verificación pública:** cualquiera consulta el certificado desde la URL del QR, sin cuenta, y ve título, entidad emisora y demás datos.
+6. **Respaldo:** cada certificado se puede exportar como **JSON firmado**, para no depender de ninguna cadena. El motor es la fuente de verdad; el JSON es el formato de intercambio y respaldo.
+
+Visto de punta a punta (**planeado**; el motor aún no existe):
 
 ```
- Entidad                          VeritaX                           Quien verifica
- ───────                          ───────                           ──────────────
- prepara y aprueba   ──►  cifra los datos personales
- el certificado           (base de datos propia)
-                          calcula hash con sal      ──►  registro (attestation)
-                          genera PDF con QR              en Base con EAS:
-                                                         solo datos no identificables
-                                                         + hash con sal
- entrega PDF/QR  ─────────────────────────────────────►  escanea el QR, recalcula
- al titular                                              el hash y compara con la cadena
+ Club o entidad                    Motor VeritaX (Stellar)             Quien verifica
+ ──────────────                    ──────────────────────             ──────────────
+ define el esquema   ──►  guarda el esquema (versionado)
+ y emite el
+ certificado         ──►  registra el certificado en el
+                          contrato (datos mínimos)
+ entrega el PDF/QR ─────────────────────────────────────────►  escanea el QR y abre la
+ a la persona                                                  URL pública: ve título,
+                                                               emisor, fecha y estado
+ (puede revocar)     ──►  marca el registro como revocado ──►  la verificación lo muestra
 ```
 
-1. **Plantilla:** un diseño SVG genérico, sin datos personales, guardado de forma permanente en Arweave.
-2. **Datos personales** (nombre, documento): viven **cifrados** en una base de datos propia. Nunca en la cadena ni en Arweave.
-3. **Registro:** se crea una *attestation* de EAS (Ethereum Attestation Service) en Base. Contiene solo datos no identificables y un **hash con sal** de los datos personales.
-4. **Verificación:** se recalcula el hash con los datos y la sal del documento y se compara con el de la cadena. Además se revisa que no esté revocado y que el emisor sea una entidad registrada.
+Datos de la versión 1: nombre completo, sin documento de identidad. Hay dos campos opcionales reservados y vacíos (referencia a datos cifrados e identificador del miembro).
 
-## 3. Por qué Base (una cadena basada en Ethereum con EAS nativo)
+## 4. Mapa de repositorios
 
-- **EAS ya viene incluido.** En Base, y en las demás cadenas del stack OP, EAS y su registro de schemas son contratos predesplegados. No hay que desplegar ni mantener el protocolo base: se usa directamente.
-- **Seguridad heredada de Ethereum.** Base es una L2 que publica sus datos en Ethereum, por lo que un registro no se puede alterar a escondidas.
-- **Costos bajos por certificado**, adecuados para emitir en volumen. Las cifras reales se miden en el ejercicio de costos; este README no fija precios.
-- **Ecosistema maduro:** herramientas estándar (ethers, SDK de EAS, Hardhat) y amplia documentación.
-- **Cadena configurable.** El `chainId`, el RPC y las direcciones de los contratos vienen de configuración, nunca fijos en el código. Si más adelante conviene otra cadena con EAS, el cambio es de configuración.
+La organización existe para no mezclar proyectos: cada repositorio tiene un propósito único.
 
-Los ejercicios actuales usan **Base Sepolia** (testnet). Aún no se usa mainnet.
+| Repositorio | Qué es | Estado |
+|---|---|---|
+| [`.github`](https://github.com/VeritaX-Protocol/.github) | Este README de la organización | Activo |
+| [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab) | **Laboratorio conceptual** para entender cómo funciona EAS (Ethereum Attestation Service) en Base y qué sigue vigente. No es código de producto | En curso: ejercicios 01 a 03 publicados |
+| [`activities`](https://github.com/VeritaX-Protocol/activities) | Repositorio auxiliar que replica los commits de los demás para que [Stellar Apex](https://stellarapex.org) los registre | Activo |
+| Repos de producto | Motor mínimo sobre Stellar (contrato Soroban, bibliotecas internas, etc.) | Por venir |
 
-## 4. Pagos (planificado)
+## 5. Beneficios (esperados)
 
-El cobro del servicio a las entidades se resolverá con una capa de pagos separada de los certificados. Los certificados siempre se registran en Base; los pagos son otro tema.
+- **Verificación inmediata y pública:** escaneando un QR, sin crear una cuenta ni escribir al club.
+- **Difícil de falsificar:** el registro vive en la cadena y no se puede alterar a escondidas.
+- **Revocación:** el club puede invalidar un certificado y la verificación lo muestra.
+- **Independiente del emisor:** el registro sigue verificable aunque el club cambie de sistema o se retire.
+- **Trazabilidad:** quién emitió, cuándo y con qué versión del esquema.
+- **Respaldo portable:** el JSON firmado se puede exportar y conservar fuera de la cadena.
+- **Costos por medir:** el costo real por certificado se mide en testnet; este README no fija precios.
 
-- **Stellar** se habilitará como pasarela de pagos.
-- **Medios de pago tradicionales** a través de pasarelas bancarias (por ejemplo, tarjeta y transferencia).
-- **Rampas cripto** (de entrada y de salida de dinero) para quien prefiera pagar con criptomonedas.
+## 6. Hoja de ruta por etapas
 
-Esta parte está por diseñar: aún no hay proveedores definidos ni fechas.
+Sin fechas rígidas; cada etapa depende de que la anterior salga bien.
 
-## 5. Beneficios
+- **v1 (motor mínimo):** subir esquemas con versionado, emisores autorizados por esquema, registro básico en el contrato, revocación, consulta de estado, verificación pública por URL/QR y respaldo en JSON firmado.
+- **v1.1:** panel para organizadores, constructor de esquemas sin código y emisión por lotes con raíz Merkle, solo si el costo medido lo exige.
+- **v2:** datos sensibles cifrados en una base de datos (nunca en la cadena), cuentas de miembro y exportación a credencial W3C 2.0.
+- **v3:** SDK para terceros. Por ahora solo hay bibliotecas de uso interno.
 
-- **Verificación inmediata y pública:** escaneando un QR, sin llamar ni escribir a la entidad.
-- **Resistente a la falsificación:** cualquier cambio en los datos produce un hash distinto al registrado.
-- **Revocación:** la entidad puede invalidar un documento y la verificación lo mostrará.
-- **Independiente del emisor:** el registro sigue verificable aunque la entidad cambie de sistema.
-- **Trazabilidad:** quién emitió, cuándo y con qué plantilla.
-- **Plantillas permanentes y versionadas** (Arweave).
-- **Bajo costo operativo** frente a procesos manuales de validación.
+## 7. Principios
 
-## 6. Privacidad: no se exponen datos sensibles
+- **Datos mínimos:** solo lo necesario para verificar.
+- **Nada sensible en la cadena.** Lo sensible, cuando exista, irá cifrado fuera de la cadena en etapas futuras.
+- **Respaldo propio:** el JSON firmado permite no depender de una sola cadena.
+- **Sin proveedor único.**
+- **Código abierto.**
 
-- **Ningún dato personal en la cadena ni en Arweave.** Jamás.
-- **Hash con sal:** cada certificado lleva una sal aleatoria única. Nunca se publica algo como `hash(cédula)` a secas, que se podría adivinar probando números.
-- **Datos cifrados:** los datos personales se guardan cifrados (AES-GCM) en la base de datos de la entidad. Las llaves no viven en el código ni en el repositorio.
-- **Supresión posible:** si una persona pide eliminar sus datos, se destruyen los datos y la sal; el hash que queda en la cadena ya no se puede asociar a nadie.
-- **Quien tiene el documento decide a quién se lo muestra:** la verificación necesita los datos y la sal que lleva el propio documento.
+## 8. Cadenas
 
-## 7. Alcance y límites (importante)
+- **Hoy: Stellar.** Todo el trabajo del motor se hace sobre Stellar.
+- **Futuro:** Base (que incluye EAS de forma nativa), Solana y BNB podrían añadirse mediante un adaptador sobre el mismo núcleo, y solo con una demanda por escrito.
 
-VeritaX es un **testigo técnico**. Lo que puede respaldar, hasta cierto punto:
+## 9. Alcance y límites (importante)
+
+VeritaX es un **testigo técnico**. Puede respaldar, hasta cierto punto:
 
 - que el registro **existe** y no se alteró desde que se creó;
-- que lo emitió una **entidad registrada** como autorizada;
+- que lo emitió una **entidad autorizada** para ese esquema;
 - **cuándo** se registró;
-- que los datos presentados **coinciden** con los registrados;
 - si fue **revocado** o no.
 
 Lo que **no** hace:
 
-- **No certifica la validez académica ni legal** del título o certificado. Esa validez la da únicamente la entidad que lo emite (universidad, instituto, organizador, etc.).
+- **No certifica la validez académica ni legal** de lo que dice el certificado. Esa responsabilidad es del club que lo emite.
 - **No es firma digital** ni **estampado cronológico** de una entidad de certificación digital acreditada.
-- "**No encontrado**" **no significa "falso"**: puede ser un error de lectura, otra cadena o un documento emitido fuera del sistema. La verificación distingue estados y muestra avisos aclaratorios.
+- "**No encontrado**" **no significa "falso"**: puede ser un error de lectura, otra cadena o un certificado emitido fuera del sistema. La verificación debe distinguir estados y mostrar avisos aclaratorios.
 
-## 8. Estado del proyecto
+## 10. Lo explorado en el laboratorio
 
-Se está construyendo por etapas con ejercicios cortos y desechables, antes de escribir las especificaciones del producto.
+Antes de decidir el diseño se está explorando EAS en la testnet de Base (Base Sepolia) en [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab): esquemas, attestations, lectura y verificación, y más adelante revocación, resolvers y modo fuera de la cadena. Es **exploración para tener criterio**; sus decisiones y su código no son el diseño del producto.
 
-- Laboratorio EAS: [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab) (tabla de contenido y reglas en [`eas-lab/LEEME.md`](https://github.com/VeritaX-Protocol/eas-lab/blob/main/LEEME.md))
-- Resultados de cada ejercicio: `eas-lab/resultados/NN-nombre/` (cada uno es un proyecto autocontenido)
-- Avance: ningún ejercicio terminado todavía. El ejercicio 01 (conexión a Base Sepolia, wallets de prueba y verificación de EAS) está pendiente.
-- Reglas del proceso: solo testnet, llaves de prueba, el código de los spikes no pasa a producción sin una especificación.
+## 11. Cómo seguir el proyecto
 
-## 9. Stack técnico
-
-| Pieza | Tecnología |
-|---|---|
-| Cadena y attestations | Base (Sepolia en pruebas) + EAS |
-| Emisores autorizados | Contrato *resolver* propio, con Hardhat 3 |
-| Plantillas | SVG en Arweave |
-| Datos personales | Base de datos propia, cifrada |
-| Código | TypeScript, ethers v6, SDK de EAS |
-| Pagos | Stellar, pasarelas bancarias y rampas cripto (planificado) |
+El avance se sigue en [Stellar Apex](https://stellarapex.org), que registra commits y actualizaciones semanales. El repositorio [`activities`](https://github.com/VeritaX-Protocol/activities) reúne los commits de toda la organización para ese fin.
