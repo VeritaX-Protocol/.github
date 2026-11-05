@@ -55,7 +55,7 @@ La organización existe para no mezclar proyectos: cada repositorio tiene un pro
 | Repositorio | Qué es | Estado |
 |---|---|---|
 | [`.github`](https://github.com/VeritaX-Protocol/.github) | Este README de la organización | Activo |
-| [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab) | **Laboratorio conceptual** para entender cómo funciona EAS (Ethereum Attestation Service) en Base y qué sigue vigente. No es código de producto | En curso: ejercicios 01 a 03 publicados |
+| [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab) | **Laboratorio conceptual** para entender cómo funciona EAS (Ethereum Attestation Service) en Base y qué sigue vigente. No es código de producto | En curso: ejercicios 01 a 04 publicados |
 | [`activities`](https://github.com/VeritaX-Protocol/activities) | Repositorio auxiliar que replica los commits de los demás para que [Stellar Apex](https://stellarapex.org) los registre | Activo |
 | Repos de producto | Motor mínimo sobre Stellar (contrato Soroban, bibliotecas internas, etc.) | Por venir |
 
