@@ -1,26 +1,28 @@
 # VeritaX Protocol
 
-Un motor mínimo y abierto para que **clubes educativos informales** emitan **certificados de asistencia o de cursos de capacitación** que cualquier persona pueda verificar con una URL pública, normalmente un QR impreso en el certificado.
+Un **sistema para crear certificados** pensado para **entidades educativas informales**: constancias de asistencia, de participación en un evento, de cursos de capacitación y otros documentos **no legales** que la entidad necesite. Cualquier persona puede verificarlos con una URL pública, normalmente un QR impreso en el documento. Por dentro, el sistema usa un **motor propio**.
 
-> **Estado:** investigación y laboratorios. El motor de producto **todavía no está construido**. Lo descrito como "planeado" no existe aún, no hay pilotos en producción y no se ha desplegado nada en Mainnet.
+> **Estado:** investigación y laboratorios. El sistema y su motor **todavía no están construidos**. Lo descrito como "planeado" no existe aún, no hay pilotos en producción y no se ha desplegado nada en Mainnet.
 
 ---
 
 ## 1. Problema y público
 
-Los clubes y comunidades de aprendizaje informal (por ejemplo WayLearn, My First Bitcoin, Satoshi Team, BAF, Cartagena Onchain o Platohedro) entregan constancias de asistencia y de cursos cortos, pero cada una es un PDF o una imagen que nadie puede comprobar fácilmente.
+Los clubes y comunidades de aprendizaje informal (por ejemplo WayLearn, My First Bitcoin, Satoshi Team, BAF, Cartagena Onchain o Platohedro) entregan constancias de asistencia, de participación en eventos y de cursos cortos, pero cada una es un PDF o una imagen que nadie puede comprobar fácilmente.
 
-VeritaX busca que ese certificado sea verificable en segundos, sin crear una cuenta y sin llamar al club.
+VeritaX busca que ese documento sea verificable en segundos, sin crear una cuenta y sin llamar al club.
 
 Los primeros pilotos previstos son **Cartagena Onchain** y **Platohedro**, organizaciones cercanas al proyecto. Son planes: aún no hay ninguno en marcha.
 
-**Alcance.** VeritaX no emite títulos académicos ni certificados con responsabilidad legal mayor. Por ahora solo certificados de asistencia y de curso de capacitación.
+**Alcance.** Por ahora VeritaX solo crea documentos **no legales**: asistencia, participación en un evento, curso de capacitación y otros que una entidad educativa informal requiera. No emite títulos académicos ni certificados con responsabilidad legal.
 
 ## 2. Qué se construye y por qué
 
-VeritaX construye su **propio motor mínimo**, que corre sobre **Stellar (Soroban)**, y ese motor es el que se usa para emitir las certificaciones de los clubes. No es solo una capa de attestations: incluye esquemas, emisores autorizados, registro, revocación y verificación pública.
+**VeritaX es un sistema, no un motor.** Es la plataforma con la que una entidad educativa informal define el tipo de documento que necesita, lo emite, lo revoca si hace falta y permite que cualquiera lo verifique.
 
-Existen servicios de attestations sobre Stellar y otras cadenas. VeritaX construye un motor mínimo enfocado en clubes educativos informales y lo mantiene abierto para interoperar con otros servicios más adelante. Algunas de esas ideas, como las de ACTA, se consideran para etapas futuras y otros usos.
+**Dentro del sistema se usa un motor propio:** un componente mínimo que corre sobre **Stellar (Soroban)** y se encarga de los esquemas, los emisores autorizados, el registro, la revocación y la verificación. El motor es una pieza interna del sistema; lo que ven los clubes y quienes verifican es el sistema completo.
+
+Existen servicios de attestations sobre Stellar y otras cadenas. VeritaX construye un motor mínimo enfocado en entidades educativas informales y lo mantiene abierto para interoperar con otros servicios más adelante. Algunas de esas ideas, como las de ACTA, se consideran para etapas futuras y otros usos.
 
 ## 3. Cómo funciona (visión general)
 
@@ -57,7 +59,7 @@ La organización existe para no mezclar proyectos: cada repositorio tiene un pro
 | [`.github`](https://github.com/VeritaX-Protocol/.github) | Este README de la organización | Activo |
 | [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab) | **Laboratorio conceptual** para entender cómo funciona EAS (Ethereum Attestation Service) en Base y qué sigue vigente. No es código de producto | En curso: ejercicios 01 a 04 publicados |
 | [`activities`](https://github.com/VeritaX-Protocol/activities) | Repositorio auxiliar que replica los commits de los demás para que [Stellar Apex](https://stellarapex.org) los registre | Activo |
-| Repos de producto | Motor mínimo sobre Stellar (contrato Soroban, bibliotecas internas, etc.) | Por venir |
+| Repos de producto | El sistema de certificados y su motor propio sobre Stellar (contrato Soroban, bibliotecas internas, etc.) | Por venir |
 
 ## 5. Beneficios (esperados)
 
@@ -73,7 +75,7 @@ La organización existe para no mezclar proyectos: cada repositorio tiene un pro
 
 Sin fechas rígidas; cada etapa depende de que la anterior salga bien.
 
-- **v1 (motor mínimo):** subir esquemas con versionado, emisores autorizados por esquema, registro básico en el contrato, revocación, consulta de estado, verificación pública por URL/QR y respaldo en JSON firmado.
+- **v1 (sistema con motor mínimo):** subir esquemas con versionado, emisores autorizados por esquema, registro básico en el contrato, revocación, consulta de estado, verificación pública por URL/QR y respaldo en JSON firmado.
 - **v1.1:** panel para organizadores, constructor de esquemas sin código y emisión por lotes con raíz Merkle, solo si el costo medido lo exige.
 - **v2:** datos sensibles cifrados en una base de datos (nunca en la cadena), cuentas de miembro y exportación a credencial W3C 2.0.
 - **v3:** SDK para terceros. Por ahora solo hay bibliotecas de uso interno.
