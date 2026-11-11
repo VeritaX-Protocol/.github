@@ -58,7 +58,7 @@ La organización existe para no mezclar proyectos: cada repositorio tiene un pro
 |---|---|---|
 | [`.github`](https://github.com/VeritaX-Protocol/.github) | Este README de la organización | Activo |
 | [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab) | **Laboratorio conceptual** para entender cómo funciona EAS (Ethereum Attestation Service) en Base y qué sigue vigente. No es código de producto | Completado: ejercicios 01 a 09 hechos |
-| [`sas-lab`](https://github.com/VeritaX-Protocol/sas-lab) | **Laboratorio conceptual** previo al Sprint 1 para entender Soroban (Stellar) y el contrato de [Attest Protocol](https://github.com/daccred/attestprotocol): toolchain, almacenamiento con TTL, costos por tamaño, autorización de emisores y upgrade. No es código de producto | En preparación: enunciados 00 a 04 y cierre escritos, ejercicios por ejecutar (repo privado por ahora) |
+| [`sas-lab`](https://github.com/VeritaX-Protocol/sas-lab) | **Laboratorio conceptual** previo al Sprint 1 para entender Soroban (Stellar) y el contrato de [Attest Protocol](https://github.com/daccred/attestprotocol): toolchain, almacenamiento con TTL, costos por tamaño, autorización de emisores y upgrade. No es código de producto | En preparación: enunciados 00 a 04 y cierre escritos, ejercicios por ejecutar |
 | [`activities`](https://github.com/VeritaX-Protocol/activities) | Repositorio auxiliar que replica los commits de los demás para que [Stellar Apex](https://stellarapex.org) los registre | Activo |
 | Repos de producto | El sistema de certificados y su motor propio sobre Stellar (contrato Soroban, bibliotecas internas, etc.) | Por venir |
 
