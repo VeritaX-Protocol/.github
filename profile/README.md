@@ -57,7 +57,8 @@ La organización existe para no mezclar proyectos: cada repositorio tiene un pro
 | Repositorio | Qué es | Estado |
 |---|---|---|
 | [`.github`](https://github.com/VeritaX-Protocol/.github) | Este README de la organización | Activo |
-| [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab) | **Laboratorio conceptual** para entender cómo funciona EAS (Ethereum Attestation Service) en Base y qué sigue vigente. No es código de producto | En curso: ejercicios 01 a 04 publicados |
+| [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab) | **Laboratorio conceptual** para entender cómo funciona EAS (Ethereum Attestation Service) en Base y qué sigue vigente. No es código de producto | Completado: ejercicios 01 a 09 hechos |
+| [`sas-lab`](https://github.com/VeritaX-Protocol/sas-lab) | **Laboratorio conceptual** previo al Sprint 1 para entender Soroban (Stellar) y el contrato de [Attest Protocol](https://github.com/daccred/attestprotocol): toolchain, almacenamiento con TTL, costos por tamaño, autorización de emisores y upgrade. No es código de producto | En preparación: enunciados 00 a 04 y cierre escritos, ejercicios por ejecutar (repo privado por ahora) |
 | [`activities`](https://github.com/VeritaX-Protocol/activities) | Repositorio auxiliar que replica los commits de los demás para que [Stellar Apex](https://stellarapex.org) los registre | Activo |
 | Repos de producto | El sistema de certificados y su motor propio sobre Stellar (contrato Soroban, bibliotecas internas, etc.) | Por venir |
 
@@ -110,7 +111,9 @@ Lo que **no** hace:
 
 ## 10. Lo explorado en el laboratorio
 
-Antes de decidir el diseño se está explorando EAS en la testnet de Base (Base Sepolia) en [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab): esquemas, attestations, lectura y verificación, y más adelante revocación, resolvers y modo fuera de la cadena. Es **exploración para tener criterio**; sus decisiones y su código no son el diseño del producto.
+Antes de decidir el diseño se exploró EAS en la testnet de Base (Base Sepolia) en [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab): esquemas, attestations, lectura y verificación, revocación, hash con sal, resolvers, emisión directa, modo fuera de la cadena y costos. Es **exploración para tener criterio**; sus decisiones y su código no son el diseño del producto.
+
+Del lado de Stellar, [`sas-lab`](https://github.com/VeritaX-Protocol/sas-lab) reúne los ejercicios previos al primer sprint (inicio previsto el 2026-11-16) sobre Soroban y el contrato de Attest Protocol. Sus enunciados están escritos; los resultados todavía no. Aplica la misma regla: es exploración, no el diseño del producto.
 
 ## 11. Cómo seguir el proyecto
 
