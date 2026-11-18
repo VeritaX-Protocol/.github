@@ -63,6 +63,7 @@ La organización existe para no mezclar proyectos: cada repositorio tiene un pro
 | [`.github`](https://github.com/VeritaX-Protocol/.github) | Este README de la organización | Activo |
 | [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab) | **Laboratorio conceptual** para entender cómo funciona EAS (Ethereum Attestation Service) en Base y qué sigue vigente. No es código de producto | En curso: ejercicios 01 a 04 publicados |
 | [`sas-lab`](https://github.com/VeritaX-Protocol/sas-lab) | **Laboratorio conceptual** para entender cómo funciona Attest Protocol en la testnet de Stellar (Soroban): almacenamiento, costos, autorización y actualización de contratos. No es código de producto | En curso |
+| [`ario-lab`](https://github.com/VeritaX-Protocol/ario-lab) | **Laboratorio conceptual** para entender cómo guardar plantillas de certificado (SVG) en Arweave con el servicio de subida de ar.io (antes ArDrive Turbo): costos por tamaño, formato del id, lectura por gateways y render seguro. No es código de producto | Ejercicios planteados, aún sin ejecutar |
 | [`activities`](https://github.com/VeritaX-Protocol/activities) | Repositorio auxiliar que replica los commits de los demás para que [Stellar Apex](https://stellarapex.org) los registre | Activo |
 | Repos de producto | El sistema de certificados y su motor propio sobre Stellar (contrato Soroban, bibliotecas internas, etc.) | Por venir |
 
@@ -122,7 +123,7 @@ Lo que **no** hace:
 
 ## 10. Lo explorado en el laboratorio
 
-Antes de decidir el diseño se explora EAS en la testnet de Base (Base Sepolia) en [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab) y Attest Protocol en la testnet de Stellar en [`sas-lab`](https://github.com/VeritaX-Protocol/sas-lab): esquemas, attestations, lectura y verificación, revocación, almacenamiento, costos y actualización de contratos. Es **exploración para tener criterio**; sus decisiones y su código no son el diseño del producto.
+Antes de decidir el diseño se explora EAS en la testnet de Base (Base Sepolia) en [`eas-lab`](https://github.com/VeritaX-Protocol/eas-lab) y Attest Protocol en la testnet de Stellar en [`sas-lab`](https://github.com/VeritaX-Protocol/sas-lab): esquemas, attestations, lectura y verificación, revocación, almacenamiento, costos y actualización de contratos. Además, [`ario-lab`](https://github.com/VeritaX-Protocol/ario-lab) plantea cómo guardar en Arweave las plantillas gráficas de los certificados. Es **exploración para tener criterio**; sus decisiones y su código no son el diseño del producto.
 
 ## 11. Cómo seguir el proyecto
 
